@@ -33,6 +33,35 @@ class Game(BaseObject):
         self.publicBoard = publicBoard
 
 
+class Room(BaseObject):
+    """
+    目前限制一个Room里最多有两个玩家
+    为了避免过多的依赖关系，Room只记录有那几个玩家，不记录当前游戏号等信息。如需要请去repository层取。
+
+    Args:
+        BaseObject (_type_): _description_
+    """
+    
+    def __init__(self, name, roomId:int, roomType: ObjectType, players: List[Player]) -> None:
+        """初始化一个room，玩家信息是需要的，不能只存游戏，然后去游戏里找玩家。
+            因为建好房间后可以只进入一个玩家，或者两个玩家都准备了但是没有开始游戏
+
+        Args:
+            name (str): room的名字，暂时没有作用
+            roomId (int): roomid，是一个1开头的10位整数
+            roomType (ObjectType): 房间类型，目前只有NORMAL_ROOM
+            players (List[Player]): 玩家信息
+        """
+        super().__init__(name, roomType)
+        self.id = roomId
+        self.players = players
+        
+    def addPlayer(self, player: Player)->bool:
+        if len(self.players) >= 2:
+            return False
+        self.players.append(player)
+        return True
+        
 
 if __name__ == '__main__':
     baseObject = BaseObject("名字","普通类型")

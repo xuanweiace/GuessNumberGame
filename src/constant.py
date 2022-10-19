@@ -14,8 +14,12 @@ class ObjectType(Enum):
     PLAYER_BOARD = 30
     PUBLIC_BOARD = 31
     
+    NORMAL_ROOM = 40
+    
     ONLINE_GAME = 90
     OFFLINE_GAME = 91
+    
+    
     
     
     
