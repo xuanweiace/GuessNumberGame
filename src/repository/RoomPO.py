@@ -13,11 +13,23 @@ from BasePO import BasePO
 # 除了BO的信息之外，还存了这个房间都进行了哪些游戏
 # PO 类信息还要承载，和db交互和数据格式转换的功能。
 # PO和BO的转换可以在BO中实现。
-class RoomPO(Room, BasePO):
+class RoomPO(BasePO):
     
-    def __init__(self, name:str, roomId: int, roomType: ObjectType, players: List[Player], historyGameIds:List[int]) -> None:
-        super().__init__(name, roomId, roomType, players)
-        self.historyGameIds = historyGameIds
+    def __init__(self, name:str, roomId: int, roomType: ObjectType, playerIds: str, historyGameIds:str) -> None:
+        """注意playerid存的是字符串！！！不是列表！！转化成BO的时候再eval一下即可。
+
+        Args:
+            name (str): _description_
+            roomId (int): _description_
+            roomType (ObjectType): _description_
+            playerIds (str): _description_
+            historyGameIds (str): _description_
+        """
+        self.id = roomId
+        self.name = name
+        self.type = roomType
+        self.playerIds = playerIds # List[int]
+        self.historyGameIds = historyGameIds # List[int]
     
     @staticmethod
     def db2po(t:Tuple):
@@ -32,6 +44,20 @@ class RoomPO(Room, BasePO):
         players = t[3]
         historyGameIds = t[4]
         return RoomPO(name, roomId, roomType, players, historyGameIds)
-    def hello(self, q):
-        pass
     
+    @staticmethod
+    def po2db(po: "RoomPO")->Tuple:
+        """将数据库信息转化成db里要的格式（tuple）
+
+        Args:
+            po (RoomPO): RoomPO类型的po对象
+        """
+        
+        return (po.id,po.name, po.type, str(po.playerIds), str(po.historyGameIds))
+        
+        
+    @staticmethod
+    def po2db_str(po: "RoomPO")->str:
+        # # todo 可以这样吗？ 对象调用静态方法
+        print("qweqwe:",repr(po.po2db(po)))
+        return repr(po.po2db(po))
