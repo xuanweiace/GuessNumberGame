@@ -16,4 +16,4 @@ class RoomGenerator:
         """
         # todo 生成方式
         roomId = int(time.time())
-        return Room("normal room", roomId, constant.ObjectType.NORMAL_ROOM, [])
+        return Room(roomId, "房间"+str(roomId), constant.ObjectType.NORMAL_ROOM, [], [])

@@ -15,24 +15,17 @@ from BasePO import BasePO
 # PO和BO的转换可以在BO中实现。
 class RoomPO(BasePO):
     
-    def __init__(self, name:str, roomId: int, roomType: ObjectType, playerIds: str, historyGameIds:str) -> None:
+    def __init__(self, roomId: int, name:str, roomType: ObjectType, playerIds: str, historyGameIds:str) -> None:
         """注意playerid存的是字符串！！！不是列表！！转化成BO的时候再eval一下即可。
-
-        Args:
-            name (str): _description_
-            roomId (int): _description_
-            roomType (ObjectType): _description_
-            playerIds (str): _description_
-            historyGameIds (str): _description_
+            
         """
-        self.id = roomId
-        self.name = name
-        self.type = roomType
-        self.playerIds = playerIds # List[int]
-        self.historyGameIds = historyGameIds # List[int]
+        super().__init__(roomId, name, roomType)
+
+        self.playerIds = playerIds # str 存的是List[int]
+        self.historyGameIds = historyGameIds # str 存的是List[int]
     
     @staticmethod
-    def db2po(t:Tuple):
+    def db2po(t:Tuple)->"RoomPO":
         """将数据库的元组转换成PO对象
 
         Args:
@@ -59,5 +52,17 @@ class RoomPO(BasePO):
     @staticmethod
     def po2db_str(po: "RoomPO")->str:
         # # todo 可以这样吗？ 对象调用静态方法
-        print("qweqwe:",repr(po.po2db(po)))
         return repr(po.po2db(po))
+    
+    @staticmethod
+    def po2kv_str(po: "RoomPO")->str:
+        return f"id={po.id},name={repr(po.name)},type={po.type},player_ids={repr(po.playerIds)},history_game_ids={repr(po.historyGameIds)}"
+    
+    @staticmethod
+    def bo2po(bo: "Room")->"RoomPO":
+        # todo RoomPO.historyGameIds这个字段弃用了
+        return RoomPO(bo.id, bo.name, bo.type, repr([x.id for x in bo.players]), '[]')
+    
+       
+    
+    
