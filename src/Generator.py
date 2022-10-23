@@ -1,8 +1,9 @@
 from BaseObject import Room
 import time
 import constant
+from repository.crud import roomCRUD
 class RoomGenerator:
-    """生成一个人RoomBO
+    """生成一个RoomBO
     """
     def __init__(self) -> None:
         pass
@@ -15,5 +16,5 @@ class RoomGenerator:
             Room: _description_
         """
         # todo 生成方式
-        roomId = int(time.time())
+        roomId = roomCRUD.selectMaxId() + 1
         return Room(roomId, "房间"+str(roomId), constant.ObjectType.NORMAL_ROOM, [], [])

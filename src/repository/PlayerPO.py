@@ -12,6 +12,8 @@ from BasePO import BasePO
 
 class PlayerPO(BasePO):
     
+    columns_str = "(id,name,type,score,portrait,password)"
+    
     def __init__(self, id:str, name: str, playerType: ObjectType, score: int, portrait: str) -> None:
         super().__init__(id, name, playerType)
         self.score=score

@@ -1,5 +1,6 @@
+from typing import Tuple, List
 import pymysql
- 
+from loguru import logger
 # db_connection  是一个对象，用来创建游标
 db_connection = pymysql.connect(host='localhost', user='root', password='123456',
                              database='NumberGuessGame', port=3306, charset='utf8mb4')
@@ -11,24 +12,47 @@ cursor = db_connection.cursor()
 cursor.close()
 
 
-def execute_sql(sql: str)->None:
-    cursor = db_connection.cursor()
-    cursor.execute(sql)
-    # cursor.execute("SELECT LAST_INSERT_ID()")
-    # res = cursor.fetchall()
-    res = cursor.lastrowid
-    print("res:", res)
-    # 提交后才会生效
-    db_connection.commit()
+def execute_sql(sql: str)->Tuple:
+    try:
+        cursor = db_connection.cursor()
+        cursor.execute(sql)
+        # cursor.execute("SELECT LAST_INSERT_ID()")
+        res = cursor.fetchall()
+        # 提交后才会生效
+        db_connection.commit()
+    except Exception as e:
+        db_connection.rollback()
+        raise
+    finally:
+        cursor.close()
+        return res
 
-    cursor.close()
+# 以事务的方式执行若干sql语句。并依次返回结果集
+def execute_sqls_in_transaction(sqls: List[str])->List[Tuple]:
+    try:
+        cursor = db_connection.cursor()
+        res = []
+        for sql in sqls:
+            cursor.execute(sql)
+            res.append(cursor.fetchall())
+        # 提交后才会生效
+        db_connection.commit()
+        
+    except Exception as e:
+        db_connection.rollback()
+        raise
+    finally:
+        cursor.close()
+        return res
     
 def select_sql(sql: str)->tuple:
-    cursor = db_connection.cursor()
-    cursor.execute(sql)
-    res = cursor.fetchall()
-    # print("-----cursor.fetchall()-----")
-    # print(res)
-    # print("-----cursor.fetchall()-----")
-    cursor.close()
-    return res
+    try:
+        cursor = db_connection.cursor()
+        cursor.execute(sql)
+        res = cursor.fetchall()
+    except Exception as e:
+        db_connection.rollback()
+        raise    
+    finally:
+        cursor.close()
+        return res

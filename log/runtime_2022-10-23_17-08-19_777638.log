@@ -1,0 +1,13 @@
+2022-10-23 17:08:19.800 | INFO     | __main__:main:38 - GuessNumberGame Server Start Successfully.
+2022-10-23 17:08:38.882 | DEBUG    | __main__:echo:12 - conn:<websockets.legacy.server.WebSocketServerProtocol object at 0x7f74f971eac0>
+2022-10-23 17:08:38.883 | DEBUG    | __main__:echo:13 - path:/
+2022-10-23 17:08:38.895 | INFO     | __main__:echo:26 - got a message:{"api": "map", "cmd": "set", "request_message_id": "abcdef123456", "args": {"south_lat": -90, "north_lat": 90, "west_lng": -180, "east_lng": 180}}
+2022-10-23 17:09:48.775 | DEBUG    | __main__:echo:12 - conn:<websockets.legacy.server.WebSocketServerProtocol object at 0x7f74f971eeb0>
+2022-10-23 17:09:48.776 | DEBUG    | __main__:echo:13 - path:/create_room
+2022-10-23 17:09:48.786 | INFO     | __main__:echo:26 - got a message:{"api": "map", "cmd": "set", "request_message_id": "abcdef123456", "args": {"south_lat": -90, "north_lat": 90, "west_lng": -180, "east_lng": 180}}
+2022-10-23 17:10:07.829 | DEBUG    | __main__:echo:12 - conn:<websockets.legacy.server.WebSocketServerProtocol object at 0x7f74f96be4f0>
+2022-10-23 17:10:07.830 | DEBUG    | __main__:echo:13 - path:/create_room
+2022-10-23 17:10:07.840 | INFO     | __main__:echo:26 - got a message:{"api": "map", "cmd": "set", "request_message_id": "abcdef123456", "args": {"south_lat": -90, "north_lat": 90, "west_lng": -180, "east_lng": 180}}
+2022-10-23 17:14:38.040 | DEBUG    | __main__:echo:12 - conn:<websockets.legacy.server.WebSocketServerProtocol object at 0x7f74f971eee0>
+2022-10-23 17:14:38.041 | DEBUG    | __main__:echo:13 - path:/create_room
+2022-10-23 17:14:38.049 | INFO     | __main__:echo:26 - got a message:{"api": "map", "cmd": "set", "request_message_id": "abcdef123456", "args": {"south_lat": -90, "north_lat": 90, "west_lng": -180, "east_lng": 180}}

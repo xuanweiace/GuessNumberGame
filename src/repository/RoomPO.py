@@ -15,6 +15,8 @@ from BasePO import BasePO
 # PO和BO的转换可以在BO中实现。
 class RoomPO(BasePO):
     
+    columns_str = "(id,name,type,player_ids,history_game_ids)"
+    
     def __init__(self, roomId: int, name:str, roomType: ObjectType, playerIds: str, historyGameIds:str) -> None:
         """注意playerid存的是字符串！！！不是列表！！转化成BO的时候再eval一下即可。
             
