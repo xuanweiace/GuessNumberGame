@@ -1,7 +1,0 @@
-2022-10-23 17:29:25.199 | INFO     | __main__:main:42 - GuessNumberGame Server Start Successfully.
-2022-10-23 17:29:29.138 | DEBUG    | __main__:echo:12 - conn:<websockets.legacy.server.WebSocketServerProtocol object at 0x7f6bb2190c10>
-2022-10-23 17:29:29.139 | DEBUG    | __main__:echo:13 - path:/create_room
-2022-10-23 17:29:29.149 | INFO     | __main__:echo:28 - got a message:{"api": "map", "cmd": "set", "request_message_id": "abcdef123456", "args": {"south_lat": -90, "north_lat": 90, "west_lng": -180, "east_lng": 180}}
-2022-10-23 18:06:56.205 | DEBUG    | __main__:echo:12 - conn:<websockets.legacy.server.WebSocketServerProtocol object at 0x7f6bb2190f10>
-2022-10-23 18:06:56.206 | DEBUG    | __main__:echo:13 - path:/ngg
-2022-10-23 18:06:56.215 | INFO     | __main__:echo:28 - got a message:{"api": "create_room", "userId": 200, "request_message_id": "abcdef123456", "args": {"south_lat": -90, "north_lat": 90, "west_lng": -180, "east_lng": 180}}

@@ -1,3 +1,4 @@
+from enum import Enum
 import json
 
 __all__ = ["FixedTypeListException", "FixedTypeList", "load_from_json", "dump_to_json"]
@@ -31,7 +32,7 @@ class FixedTypeList(list):
                 % (str(type(obj)), str(self.element_type)))
 
 
-def load_from_json(obj, json_str, input_encoding='gbk'):
+def load_from_json(obj, json_str, input_encoding='utf-8'):
     '''
     obj表示预期转换成的对象
     input_encoding表示输入json字符串的编码格式
@@ -41,7 +42,7 @@ def load_from_json(obj, json_str, input_encoding='gbk'):
     return _load_from_json_object(obj, json_object)
 
 
-def dump_to_json(obj, outpu_encoding='gbk', no_extra_space=True):
+def dump_to_json(obj, outpu_encoding='utf-8', no_extra_space=True):
     '''
     obj为需要dump的对象
     output_encoding为输出json字符串的编码格式
@@ -61,7 +62,9 @@ def _is_native_json_type(obj):
 
 
 def _load_from_json_object(obj, json_object):
-    if isinstance(json_object, dict):
+    if isinstance(obj, Enum):# 增加对枚举的支持，必须放在最前面，不然就进dict的逻辑了
+        return obj.__class__(json_object["value"])
+    elif isinstance(json_object, dict):
         return _load_from_json_dict(obj, json_object)
     elif isinstance(json_object, list):
         return _load_from_json_array(obj, json_object)
@@ -76,6 +79,7 @@ def _load_from_json_dict(obj, json_dict):
                     (str(type(obj)), k))
         subobj = getattr(obj, k)
         subobj = _load_from_json_object(subobj, v)
+        print("kkkkkkk",obj,k,subobj )
         setattr(obj, k, subobj)
     return obj
 
@@ -87,6 +91,7 @@ def _load_from_json_array(array_obj, json_array):
             element_obj = _load_from_json_object(element_type(), json_element)
             array_obj.append(element_obj)
     else:
+        print("array_obj", array_obj, type(array_obj))
         raise ValueError('must use FixedTypeList to store json array')
     return array_obj
 

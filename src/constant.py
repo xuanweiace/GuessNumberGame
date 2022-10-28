@@ -19,7 +19,21 @@ class ObjectType(Enum):
     ONLINE_GAME = 90
     OFFLINE_GAME = 91
     
+class UserStatus(Enum):
+    ONLINE = 1
+    OFFLINE = 2
     
     
+    
+if __name__ == '__main__':
+    print(UserStatus.ONLINE == UserStatus(1))
+    
+    print(UserStatus.ONLINE.__class__(2))
+    print(str(UserStatus.ONLINE))
+    
+    d = {"userstatus": UserStatus.ONLINE}
+    import json
+    
+    print(json.dumps(d))
     
     

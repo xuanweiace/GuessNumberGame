@@ -1,6 +1,6 @@
 from constant import ObjectType, Color
 from typing import List, Dict
-
+from json_serializer import *
 """
 BO层的子对象必须要存实体了，不能只存id了（比如room里的player），因为要涉及到和客户端交互了。
 """
@@ -12,7 +12,7 @@ class BaseObject:
 
 # 注意value是str不是int
 class Card(BaseObject):
-    def __init__(self, cardId: int, name: str, cardType: ObjectType, color: Color, value:str) -> None:
+    def __init__(self, cardId: int=0, name: str="", cardType: ObjectType=ObjectType.NORMAL_CARD, color: Color=Color.BLUE, value:str="value") -> None:
         super().__init__(cardId, name, cardType)
         self.color = color
         self.value = value
@@ -20,19 +20,19 @@ class Card(BaseObject):
 # score为该玩家得分，从数据库中读取。
 # todo 待确定。 portrait为该玩家设置的头像，暂定base64编码保存到数据库中。
 class Player(BaseObject):
-    def __init__(self, playerId,  name: str, playerType: ObjectType, score: int, portrait:str) -> None:
+    def __init__(self, playerId=0,  name: str="", playerType: ObjectType=ObjectType.NORMAL_PLAYER, score: int=0, portrait:str="") -> None:
         super().__init__(playerId, name, playerType)
         self.score = score
         self.portrait = portrait
         
 class Board(BaseObject):
-    def __init__(self, boardId, name, boardType, cards: List[Card], player: Player) -> None:
+    def __init__(self, boardId=0, name="", boardType=ObjectType.PUBLIC_BOARD, cards: List[Card]=FixedTypeList(Card,[]), player: Player=Player()) -> None:
         super().__init__(boardId, name, boardType)
         self.cards = cards
         self.player = player
     
 class Game(BaseObject):
-    def __init__(self, gameId, name, gameType: ObjectType, playerBoards: List[Board], publicBoard: Board) -> None:
+    def __init__(self, gameId=0, name="", gameType: ObjectType=ObjectType.ONLINE_GAME, playerBoards: List[Board]=FixedTypeList(Board, []), publicBoard: Board=Board()) -> None:
         super().__init__(gameId, name, gameType)
         self.playerBoards = playerBoards
         self.publicBoard = publicBoard
@@ -45,8 +45,7 @@ class Room(BaseObject):
     本来打算：为了避免过多的依赖关系，Room只记录有那几个玩家，不记录当前游戏号等信息。如需要请去repository层取。
     现在打算：Room里还是要存Game信息的，同时需要冗余存player信息。因为可能有player没有game。
     """
-    
-    def __init__(self, roomId:int, name, roomType: ObjectType, players: List[Player]) -> None:
+    def __init__(self, roomId:int =0, name:str ="123", roomType: ObjectType =ObjectType.NORMAL_ROOM, players: List[Player] =FixedTypeList(Player, [])) -> None:
         """初始化一个room，玩家信息是需要的，不能只存游戏，然后去游戏里找玩家。
             因为建好房间后可以只进入一个玩家，或者两个玩家都准备了但是没有开始游戏
 
@@ -62,6 +61,7 @@ class Room(BaseObject):
     
     def newGame(self):
         assert len(self.players) == 2
+        self.game = Game()
         # if len(self.players) != 2:
         #     raise RuntimeError("创建游戏错误，玩家个数为:"+str(len(self.players)))
         
@@ -77,7 +77,21 @@ if __name__ == '__main__':
     baseObject = BaseObject(1, "名字","普通类型")
     print(baseObject.name)
     
-    
-    c = Card("蓝1", ObjectType.NORMAL_CARD, Color.BLUE, "K")
+    c = Card(1, "blue1", ObjectType.NORMAL_CARD, Color.BLUE, "K")
     print(c.color)
     print(c.type)
+    
+    player = Player(100, "player100", ObjectType.NORMAL_PLAYER, 13, "")
+    from json_serializer import dump_to_json, load_from_json
+    
+    board = Board(1, "board1", ObjectType.PLAYER_BOARD, FixedTypeList(Card, [c]), player)
+    game = Game(300, "game300", ObjectType.ONLINE_GAME, FixedTypeList(Board, [board]), board)
+    
+    print(dump_to_json(game))
+    
+    s_str = dump_to_json(game)
+    
+    g_obj = Game(0, "", 0, FixedTypeList(Board, []), FixedTypeList(Player, []))
+    g_obj = load_from_json(g_obj, s_str)
+    
+    print(g_obj.publicBoard.cards[0].name)

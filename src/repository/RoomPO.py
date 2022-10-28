@@ -53,8 +53,11 @@ class RoomPO(BasePO):
         
     @staticmethod
     def po2db_str(po: "RoomPO")->str:
-        # # todo 可以这样吗？ 对象调用静态方法
+        # # todo 可以这样吗？ 对象调用静态方法 答：可以
         return repr(po.po2db(po))
+    
+    def po2db_str_without_id(po: "RoomPO")->str:
+        return repr(po.po2db(po)[1:])
     
     @staticmethod
     def po2kv_str(po: "RoomPO")->str:

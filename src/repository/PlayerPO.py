@@ -12,8 +12,8 @@ from BasePO import BasePO
 
 class PlayerPO(BasePO):
     
-    columns_str = "(id,name,type,score,portrait,password)"
-    
+    columns_str = "(id,name,type,score,portrait)"
+    columns_str_without_id = "(name,type,score,portrait)"
     def __init__(self, id:str, name: str, playerType: ObjectType, score: int, portrait: str) -> None:
         super().__init__(id, name, playerType)
         self.score=score
@@ -50,7 +50,14 @@ class PlayerPO(BasePO):
         return repr(po.po2db(po))
     
     @staticmethod
+    def po2db_str_without_id(po: "PlayerPO")->str:
+        return repr(po.po2db(po)[1:])
+    
+    @staticmethod
     def po2kv_str(po: "PlayerPO")->str:
         return f"id={po.id},name={repr(po.name)},type={po.type},score={po.score},portrait={repr(po.portrait)}"
     
+    @staticmethod
+    def po2kv_str_without_id(po: "PlayerPO")->str:
+        return f"name={repr(po.name)},type={po.type},score={po.score},portrait={repr(po.portrait)}"   
     
