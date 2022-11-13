@@ -19,6 +19,9 @@ class PlayerPO(BasePO):
         self.score=score
         self.portrait=portrait
         
+    def self2bo(self):
+        return Player(self.id, self.name, self.type, self.score, self.portrait)
+        
     @staticmethod
     def db2po(t:Tuple)->"PlayerPO":
         """将数据库的元组转换成PO对象

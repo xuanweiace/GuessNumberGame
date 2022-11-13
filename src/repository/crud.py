@@ -1,7 +1,7 @@
 from BasePO import BasePO
 from RoomPO import RoomPO
 from PlayerPO import PlayerPO
-from typing import List, Tuple
+from typing import List, Tuple, Union
 from dbUtils import execute_sql, execute_sqls_in_transaction, select_sql
 from loguru import logger
 import traceback
@@ -92,7 +92,18 @@ class _RoomCRUD(BaseCRUD):
             err = traceback.format_exc()
             logger.error("[RoomCRUD::update] error={}".format(err))        
             
-      
+    def selectListByStatus(self, status: Union[int, list, tuple]) -> List[RoomPO]:
+        try:
+            if type(status) == int:
+                sql = f"select * from {self._tableName} where status = {status}"
+            else:
+                sql = f"select * from {self._tableName} where status in {tuple(status)}"
+            logger.info("[RoomCRUD::selectListByStatus]:sql="+sql)
+            res = execute_sql(sql)
+            return [RoomPO.db2po(x) for x in res]
+        except Exception as e:
+            err = traceback.format_exc()
+            logger.error("[RoomCRUD::selectListByStatus] error={}".format(err))        
         
 class _PlayerCRUD(BaseCRUD):
     

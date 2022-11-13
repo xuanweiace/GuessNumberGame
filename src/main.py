@@ -22,19 +22,16 @@ async def route_ngg(conn: WebSocketCommonProtocol):
     logger.debug("conn:{}".format(conn))
     # 如果已有ip再次过来，就拒绝连接。
     cli_host, cli_port = conn.remote_address
-    # if can_welcome_client(cli_host, cli_port) == False:
-    #     await conn.send(f"{'code':{err.ER.CLIENT_ALREADY_CONNECTED},'msg':'该ip已被占用,ip={cli_host}'}")
-    #     return
+    if can_welcome_client(cli_host, cli_port) == False:
+        await conn.send(f"{'code':{err.ER.CLIENT_ALREADY_CONNECTED},'msg':'该ip已被占用,ip={cli_host}'}")
+        return
     
     try: 
-        # new_client_welcome(conn, cli_host, cli_port)
+        new_client_welcome(conn, cli_host, cli_port)
         async for message in conn:
             logger.info("got a message:{}".format(message))
             data_d = json.loads(message)
-            handler = appService.getHandler(data_d['api'])
-            if path == '/create_room':
-                newRoomId = nggService.createRoom(103)
-                await conn.send("create room success")
+            handler = nggService.getHandler(data_d['api'])
             if handler != None:
                 res = handler(data_d["data"])
             else:

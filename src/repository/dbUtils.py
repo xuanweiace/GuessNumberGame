@@ -2,11 +2,17 @@ from typing import Tuple, List
 import pymysql
 from loguru import logger
 
-
+import atexit
 # db_connection  是一个对象，用来创建游标
 db_connection = pymysql.connect(host='localhost', user='root', password='123456',
                              database='NumberGuessGame', port=3306, charset='utf8mb4')
 
+
+def close_conn_hook():
+    print("当前db_connection:", db_connection.query)
+    db_connection.close()
+
+atexit.register(close_conn_hook)
 
 #获取游标
 cursor = db_connection.cursor()
@@ -14,7 +20,7 @@ cursor = db_connection.cursor()
 cursor.close()
 
 
-def execute_sql(sql: str)->Tuple:
+def execute_sql(sql: str)->Tuple[Tuple]:
     try:
         cursor = db_connection.cursor()
         cursor.execute(sql)

@@ -45,6 +45,8 @@ class AppService:
 
         Args:
             data (dict): 必须包含，username
+        Returns:
+            可能返回的错误码：RECORD_NOT_EXIST，USER_ALREADY_ONLINE
         """
         username = data["username"]
         playerPO = playerCRUD.selectByName(username)
@@ -64,6 +66,8 @@ class AppService:
         """用户登出
         Args:
             data (dict): 要求必须要有username字段
+        Returns:
+            可能返回的错误码：RECORD_NOT_EXIST，USER_ALREADY_OFFLINE
         """
         username = data["username"]
         playerPO = playerCRUD.selectByName(username)
