@@ -1,0 +1,4 @@
+2022-11-13 21:41:56.061 | INFO     | __main__:main:92 - GuessNumberGame Server Start Successfully.
+2022-11-13 21:41:58.229 | DEBUG    | __main__:route_ngg:22 - conn:<websockets.legacy.server.WebSocketServerProtocol object at 0x7f29835a29d0>
+2022-11-13 21:41:59.020 | INFO     | __main__:route_ngg:32 - got a message:{"api":"list_open_room", "data":{"username":"zxz_test1","roomname":"我1"}}
+2022-11-13 21:41:59.025 | INFO     | repository.crud:selectListByStatus:102 - [RoomCRUD::selectListByStatus]:sql=select * from room where status in (0, 1)

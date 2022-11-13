@@ -42,7 +42,7 @@ def load_from_json(obj, json_str, input_encoding='utf-8'):
     return _load_from_json_object(obj, json_object)
 
 
-def dump_to_json(obj, outpu_encoding='utf-8', no_extra_space=True):
+def dump_to_json(obj, outpu_encoding='utf-8', no_extra_space=True,  output_bytes=False):
     '''
     obj为需要dump的对象
     output_encoding为输出json字符串的编码格式
@@ -50,8 +50,11 @@ def dump_to_json(obj, outpu_encoding='utf-8', no_extra_space=True):
     '''
     json_object = _dump_to_json_object(obj)
     sep = (',', ':') if no_extra_space else None
-    return json.dumps(json_object, ensure_ascii=False,
-            separators=sep).encode(outpu_encoding)
+    res = json.dumps(json_object, ensure_ascii=False,
+            separators=sep)
+    if output_bytes:
+        return res.encode(outpu_encoding)
+    return res
 
 
 def _is_native_json_type(obj):
@@ -91,7 +94,6 @@ def _load_from_json_array(array_obj, json_array):
             element_obj = _load_from_json_object(element_type(), json_element)
             array_obj.append(element_obj)
     else:
-        print("array_obj", array_obj, type(array_obj))
         raise ValueError('must use FixedTypeList to store json array')
     return array_obj
 

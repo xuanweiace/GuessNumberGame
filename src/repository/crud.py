@@ -49,7 +49,8 @@ class _RoomCRUD(BaseCRUD):
         super().__init__()
         self._tableName = "room"
         self._columns = RoomPO.columns_str
-        self._insert_pattern = self._base_insert_pattern.format(self._tableName,self._columns,"{}")
+        self._columns_without_id = RoomPO.columns_str_without_id
+        self._insert_pattern = self._base_insert_pattern.format(self._tableName,self._columns_without_id,"{}")
         self._update_pattern = self._base_update_pattern.format(self._tableName, "{}", "id={}")
     
     #重写方法

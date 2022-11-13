@@ -23,7 +23,7 @@ async def route_ngg(conn: WebSocketCommonProtocol):
     # 如果已有ip再次过来，就拒绝连接。
     cli_host, cli_port = conn.remote_address
     if can_welcome_client(cli_host, cli_port) == False:
-        await conn.send(f"{'code':{err.ER.CLIENT_ALREADY_CONNECTED},'msg':'该ip已被占用,ip={cli_host}'}")
+        await conn.send(f"{{'code':{err.ER.CLIENT_ALREADY_CONNECTED},'msg':'该ip已被占用,ip={cli_host}'}}")
         return
     
     try: 

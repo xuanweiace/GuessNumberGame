@@ -1,8 +1,22 @@
 from AppService import appService
 from BaseObject import *
+
+"""
+   ngg的上下文信息 维护在内存里而不是落库 
+"""
 client_ngg_map = dict() # 一或多个session对应一个ngg
 
 client_session_map = dict() # 一个client对应一个session
+
+import atexit
+
+def clear_client_hook():
+    for k,v in client_session_map:
+        print(f"正在清理客户端:{v.address}")
+        deal_client_leave(v.address[0], v.address[1])
+        
+atexit.register(clear_client_hook)
+
 
 # 目前仅支持一个ip向服务端建立一个连接
 # 暂时不支持 在客户端上切换用户，除非你关闭重开
@@ -11,6 +25,8 @@ class ClientContext:
         self.address = address
         self.conn = ws_connection
         self.username = username
+
+
 
 
 class NGGContext:
@@ -51,6 +67,7 @@ def can_welcome_client(cli_host, cli_port)->bool:
 # 只会在这里new ClientContext
 def new_client_welcome(conn, cli_host, cli_port):
     client_session_map[cli_host] = ClientContext((cli_host, cli_port), conn, None)
+    client_ngg_map[cli_host] = NGGContext(cli_host, cli_port)
     
 
 def client_login(cli_host):
@@ -84,5 +101,6 @@ def deal_client_leave(cli_host, cli_port):
     ngg :NGGContext = client_ngg_map[cli_host]
     
     ngg.remove_client(addr[0], addr[1])
+    
     
     
