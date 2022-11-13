@@ -79,7 +79,7 @@ def _load_from_json_dict(obj, json_dict):
                     (str(type(obj)), k))
         subobj = getattr(obj, k)
         subobj = _load_from_json_object(subobj, v)
-        print("kkkkkkk",obj,k,subobj )
+        
         setattr(obj, k, subobj)
     return obj
 
