@@ -49,6 +49,8 @@ class NGGService:
             return self.createRoom
         elif api == 'list_open_room':
             return self.listOpenRoom
+        elif api == "create_game":
+            return self.createGame
         
         else:
             return None

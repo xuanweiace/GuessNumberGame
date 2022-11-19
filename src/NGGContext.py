@@ -86,11 +86,12 @@ def deal_client_leave(cli_host, cli_port):
     if cli_host not in client_session_map:
         return
     
-    
+    print(f"对{cli_host}进行清理")
     # 接下来进行客户端清理逻辑
     
     # 先判断是否登录，如是，则登出。
     if client_login(cli_host):
+        print(f"登出{cli_host}")
         appService.logout({"username":get_client_username(cli_host)})
     
     # 销毁对应session

@@ -19,7 +19,7 @@ import err
 # 该函数维护了一个websocket长连接
 
 async def route_ngg(conn: WebSocketCommonProtocol):
-    logger.debug("conn:{}".format(conn))
+    logger.debug("conn.remote_address:{}".format(conn.remote_address))
     # 如果已有ip再次过来，就拒绝连接。
     cli_host, cli_port = conn.remote_address
     if can_welcome_client(cli_host, cli_port) == False:
