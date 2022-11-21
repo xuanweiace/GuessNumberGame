@@ -29,15 +29,17 @@ async def route_ngg(conn: WebSocketCommonProtocol):
     try: 
         new_client_welcome(conn, cli_host, cli_port)
         async for message in conn:
-            logger.info("got a message:{}".format(message))
+            logger.info("got message from({}):{}".format((cli_host,cli_port), message))
             data_d = json.loads(message)
             handler = nggService.getHandler(data_d['api'])
             if handler != None:
-                res = handler(data_d["data"])
+                res = await handler(data_d["data"])
             else:
                 res = pack_err_dict(err.ER.NO_REQUEST_HANDLER, "服务端没有该api请求的处理函数")
+            logger.info("send message to({}):{}".format((cli_host,cli_port), res))
             send_msg = json.dumps(res)
-            await conn.send(send_msg)                
+            logger.info("send message to({}):{}".format((cli_host,cli_port), res))
+            await conn.send(send_msg)               
     except Exception as e:
         erro = traceback.format_exc()
         logger.error(f"[main.route_ngg] remote_address{conn.remote_address} errpr={erro}")

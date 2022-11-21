@@ -35,7 +35,7 @@ class RoomPO(BasePO):
             from crud import playerCRUD
             player = playerCRUD.selectById(id)
             assert player != None # 应该只有注销用户 或者 数据库被篡改了才会出现这种情况
-            players.append(player)
+            players.append(player.self2bo())
             
         return Room(self.id, self.name, self.type, players, self.status)
         
@@ -53,7 +53,7 @@ class RoomPO(BasePO):
         players = t[3]
         historyGameIds = t[4]
         status = t[5]
-        return RoomPO(name, roomId, roomType, players, historyGameIds, status)
+        return RoomPO(roomId, name, roomType, players, historyGameIds, status)
     
     @staticmethod
     def po2db(po: "RoomPO")->Tuple:
@@ -76,12 +76,12 @@ class RoomPO(BasePO):
     
     @staticmethod
     def po2kv_str(po: "RoomPO")->str:
-        return f"id={po.id},name={repr(po.name)},type={po.type.value},player_ids={repr(po.playerIds)},history_game_ids={repr(po.historyGameIds)},status={po.status}"
+        return f"id={po.id},name={repr(po.name)},type={po.type},player_ids={repr(po.playerIds)},history_game_ids={repr(po.historyGameIds)},status={po.status}"
     
     @staticmethod
     def bo2po(bo: "Room")->"RoomPO":
-        # todo RoomPO.historyGameIds这个字段弃用了
-        return RoomPO(bo.id, bo.name, bo.type.value, repr([x.id for x in bo.players]), '[]', bo.status)
+        # todo RoomPO.historyGameIds这个字段弃用了，直接置为[]
+        return RoomPO(bo.id, bo.name, bo.type, repr([x.id for x in bo.players]), '[]', bo.status)
     
        
     

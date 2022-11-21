@@ -104,7 +104,7 @@ class _RoomCRUD(BaseCRUD):
             return [RoomPO.db2po(x) for x in res]
         except Exception as e:
             err = traceback.format_exc()
-            logger.error("[RoomCRUD::selectListByStatus] error={}".format(err))        
+            logger.error("[RoomCRUD::selectListByStatus] error={}".format(err))       
         
 class _PlayerCRUD(BaseCRUD):
     
@@ -172,9 +172,9 @@ class _PlayerCRUD(BaseCRUD):
         self._update(po, f'name={repr(po.score)}') 
         
         
-    def updateUserStatus(self, userId: int, status: constant.UserStatus):
+    def updateUserStatus(self, userId: int, status:int):
         try:
-            sql = f'update userstatus set status = {status.value} where user_id = {userId}'
+            sql = f'update userstatus set status = {status} where user_id = {userId}'
             logger.info("[Player::updateUserStatus]:sql="+sql)
             res = execute_sql(sql)       
         except:
@@ -183,9 +183,9 @@ class _PlayerCRUD(BaseCRUD):
             raise           
         return  
     
-    def insertUserStatus(self, userId: int, status: constant.UserStatus):
+    def insertUserStatus(self, userId: int, status: int):
         try:
-            sql = f'insert into userstatus (`user_id`, `status`) VALUES ({userId}, {status.value})'
+            sql = f'insert into userstatus (`user_id`, `status`) VALUES ({userId}, {status})'
             logger.info("[Player::insertUserStatus]:sql="+sql)
             res = execute_sql(sql)       
         except:
@@ -194,7 +194,7 @@ class _PlayerCRUD(BaseCRUD):
             raise           
         return  
     
-    def selectUserStatus(self, userId: int)->constant.UserStatus:
+    def selectUserStatus(self, userId: int)->int:
         """如果用户不存在（或者没有登录过），则返回None
 
         Args:
@@ -206,7 +206,7 @@ class _PlayerCRUD(BaseCRUD):
             res = execute_sql(sql)
             if len(res) == 0: # ()
                 return None
-            return constant.UserStatus(res[0][0])
+            return res[0][0]
         except:
             err = traceback.format_exc()
             logger.error("[Player::selectUserStatus] error={}".format(err))   

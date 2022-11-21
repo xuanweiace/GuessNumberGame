@@ -1,12 +1,11 @@
 from AppService import appService
 from BaseObject import *
-
+import json
+from websockets.legacy.protocol import WebSocketCommonProtocol
 """
    ngg的上下文信息 维护在内存里而不是落库 
 """
-client_ngg_map = dict() # 一或多个session对应一个ngg
 
-client_session_map = dict() # 一个client对应一个session
 
 import atexit
 
@@ -20,15 +19,21 @@ atexit.register(clear_client_hook)
 
 # 目前仅支持一个ip向服务端建立一个连接
 # 暂时不支持 在客户端上切换用户，除非你关闭重开
+
+client_session_map = dict() # 一个client对应一个session  {"host":ClientContext()}的格式
 class ClientContext:
     def __init__(self, address, ws_connection, username):
         self.address = address
         self.conn = ws_connection
         self.username = username
 
+def find_conn_by_username(username: str):
+    for k in client_session_map:
+        if client_session_map[k].username == username:
+            return client_session_map[k].conn
 
-
-
+    return None
+client_ngg_map = dict() # 一或多个session对应一个ngg
 class NGGContext:
     
     def __init__(self, cli_host, cli_port):
@@ -104,4 +109,9 @@ def deal_client_leave(cli_host, cli_port):
     ngg.remove_client(addr[0], addr[1])
     
     
-    
+async def push_to_user(username: str, data: dict):
+    conn:WebSocketCommonProtocol = find_conn_by_username(username)
+    if conn:
+        send_msg = json.dumps(data)
+        # 主动send但是不需要等待recv
+        await conn.send(send_msg)

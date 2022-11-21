@@ -41,6 +41,9 @@ def load_from_json(obj, json_str, input_encoding='utf-8'):
     json_object = json.loads(json_str)
     return _load_from_json_object(obj, json_object)
 
+def load_from_json_obj(obj, json_obj):
+    return _load_from_json_object(obj, json_obj)
+
 
 def dump_to_json(obj, outpu_encoding='utf-8', no_extra_space=True,  output_bytes=False):
     '''
@@ -56,6 +59,9 @@ def dump_to_json(obj, outpu_encoding='utf-8', no_extra_space=True,  output_bytes
         return res.encode(outpu_encoding)
     return res
 
+def dump_to_json_obj(obj):
+    return _dump_to_json_object(obj)
+    
 
 def _is_native_json_type(obj):
     return obj is None or isinstance(obj, bool) \

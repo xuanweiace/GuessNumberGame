@@ -35,7 +35,7 @@ class AppService:
             return pack_err_dict(err.ER.RECORD_ALREADY_EXIST, "记录已经存在")
         print("ObjectType.NORMAL_PLAYER:", ObjectType.NORMAL_PLAYER)
         print(type(ObjectType.NORMAL_PLAYER))
-        new_playerPO = PlayerPO(0,username, ObjectType.NORMAL_PLAYER.value
+        new_playerPO = PlayerPO(0,username, ObjectType.NORMAL_PLAYER
                                 , 0, portrait)
         new_playerId = playerCRUD.insert_without_id(new_playerPO)
         return pack_success_dict({"userid":new_playerId})
@@ -60,7 +60,7 @@ class AppService:
         else:
             playerCRUD.updateUserStatus(playerPO.id, UserStatus.ONLINE)
         
-        return pack_success_dict({"userid": playerPO.id, "userstatus": UserStatus.ONLINE.name})
+        return pack_success_dict({"userid": playerPO.id, "userstatus": UserStatus.ONLINE})
 
     def logout(self, data):
         """用户登出
@@ -81,7 +81,9 @@ class AppService:
         else:
             playerCRUD.updateUserStatus(playerPO.id, UserStatus.OFFLINE)
         
-        return pack_success_dict({"userid": playerPO.id, "userstatus": UserStatus.OFFLINE.name})
+        # todo 发送信息给房间里的另一个人
+        
+        return pack_success_dict({"userid": playerPO.id, "userstatus": UserStatus.OFFLINE})
         
 
 appService = AppService()
