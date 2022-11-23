@@ -39,6 +39,9 @@ class Game(BaseObject):
         self.publicBoard = publicBoard
         
         self.status = status # 简单点，先不ready了吧 直接run和over
+    
+    def setId(self, id:int):
+        self.id = id
 
 
 class Room(BaseObject):
@@ -74,6 +77,14 @@ class Room(BaseObject):
         self.players.append(player)
         return True
     
+    def setId(self, id:int)->None:
+        self.id = id
+    def setGame(self, game:Game)->None:
+        self.game = game
+        
+    def setStatus(self, status:int)->None:
+        self.status = status
+        
     def containPlayer(self, player: Player)->bool:
         for p in self.players:
             if player.id == p.id:
@@ -87,35 +98,47 @@ class Room(BaseObject):
         
 if __name__ == '__main__':
     baseObject = BaseObject(1, "名字","普通类型")
-    print(baseObject.name)
+    # print(baseObject.name)
     
     c = Card(1, "blue1", ObjectType.NORMAL_CARD, Color.BLUE, "K")
-    print(c.color)
-    print(c.type)
+    c2 = Card(2, "blue2", ObjectType.NORMAL_CARD, Color.BLUE, "K2")
+    # print(c.color)
+    # print(c.type)
     
     player = Player(100, "player100", ObjectType.NORMAL_PLAYER, 13, "")
     from json_serializer import dump_to_json, load_from_json
     
-    board = Board(1, "board1", ObjectType.PLAYER_BOARD, [c], player)
-    game = Game(300, "game300", ObjectType.ONLINE_GAME, {"101":board}, board)
+    board = Board(100, "board100", ObjectType.PLAYER_BOARD, [c], player)
+    game = Game(300, "game300", ObjectType.ONLINE_GAME, {"101":board, "123":board}, board)
     
     print(dump_to_json(game))
     
-    s_str = dump_to_json(game)
+    # s_str = dump_to_json(game)
     
-    g_obj = Game(0, "")
-    g_obj = load_from_json(g_obj, s_str)
+    # g_obj = Game(0, "")
+    # g_obj = load_from_json(g_obj, s_str)
     
-    print(g_obj.publicBoard.cards[0].name)
+    # print(g_obj.publicBoard.cards[0].name)
     
-    c2 = Card(2, "blue2", ObjectType.NORMAL_CARD, Color.BLUE, "K2")
 
-    cards = [c, c2]
-    print("-----"*10)
-    print(cards)
-    ss = dump_to_json(cards)
-    print(ss)
-    cs = FixedTypeList(Card, [])
-    print(load_from_json(cs,ss))
-    print("-----"*10)
-    print(cs)
+
+    # cards = [c, c2]
+    # print("-----"*10)
+    # print(cards)
+    # ss = dump_to_json(cards)
+    # print(ss)
+    # cs = FixedTypeList(Card, [])
+    # print(load_from_json(cs,ss))
+    # print("-----"*10)
+    # print(cs)
+    
+    
+    b1 = Board(1, "board1", ObjectType.PLAYER_BOARD, [c], player)
+    b2 = Board(2, "board2", ObjectType.PLAYER_BOARD, [c2], player)
+    
+    playerBoards = {"101":b1, "102":b2}
+    print(playerBoards)
+    json_str = dump_to_json(playerBoards)
+    print("json_str:", json_str)
+    obj = load_from_json({"555":board}, json_str)
+    print(obj)

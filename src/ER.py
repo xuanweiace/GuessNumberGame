@@ -13,5 +13,6 @@ CLIENT_ALREADY_CONNECTED = 40104
 
 # 用户操作相关
 ROOM_STATUS_NOT_WAITING = 40201 # 房间当前状态不是waiting的状态（status=0）
-ROOM_IS_FULL = 40203 # 房间是否已经满员
-ALREADY_IN_ROOM = 40204 # 是否已经在房间里
+ROOM_IS_FULL = 40203 # 房间已经满员
+ROOM_IS_NOT_FULL = 40204 # 房间没有满员
+ALREADY_IN_ROOM = 40205 # 已经在房间里

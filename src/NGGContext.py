@@ -13,7 +13,7 @@ def clear_client_hook():
     for k,v in client_session_map:
         print(f"正在清理客户端:{v.address}")
         deal_client_leave(v.address[0], v.address[1])
-        
+print("注册清理客户端的hook")        
 atexit.register(clear_client_hook)
 
 
@@ -94,7 +94,9 @@ def deal_client_leave(cli_host, cli_port):
     print(f"对{cli_host}进行清理")
     # 接下来进行客户端清理逻辑
     
-    # 先判断是否登录，如是，则登出。
+    # todo  看用户是否在房间内，如果是则退出。
+    
+    # 判断是否登录，如是，则登出。
     if client_login(cli_host):
         print(f"登出{cli_host}")
         appService.logout({"username":get_client_username(cli_host)})

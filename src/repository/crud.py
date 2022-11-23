@@ -1,6 +1,7 @@
 from BasePO import BasePO
 from RoomPO import RoomPO
 from PlayerPO import PlayerPO
+from GamePO import GamePO
 from typing import List, Tuple, Union
 from dbUtils import execute_sql, execute_sqls_in_transaction, select_sql
 from loguru import logger
@@ -212,13 +213,41 @@ class _PlayerCRUD(BaseCRUD):
             logger.error("[Player::selectUserStatus] error={}".format(err))   
             raise
 
+
+class _GameCRUD(BaseCRUD):
+    
+    def __init__(self)->None:
+        super().__init__()
+        self._tableName = "game"
+        self._columns = GamePO.columns_str
+        self._columns_without_id = GamePO.columns_str_without_id
+        self._insert_pattern = self._base_insert_pattern.format(self._tableName,self._columns_without_id,"{}")
+        self._update_pattern = self._base_update_pattern.format(self._tableName, "{}", "id={}")
         
-        
+    def selectById(self, id: int)->PlayerPO:
+        res = super().selectById(id) # 因为只有一个id，所以要么是()，要么是形如((200, 'zxz', '20', 0, None, None),)
+        if len(res) == 0:
+            return None
+        return GamePO.db2po(res[0]) 
+    
+    def insert_without_id(self, po: GamePO)->int:
+        try:
+            sql1 = self._insert_pattern.format(GamePO.po2db_str_without_id(po))
+            sql2 = self._select_max_id_pattern.format(self._tableName)
+            logger.info("[GamePO::insert_without_id]:sql1="+sql1+"\nsql2="+sql2)
+            res = execute_sqls_in_transaction([sql1, sql2])
+            if len(res)>1:
+                return res[1][0][0]
+        except Exception as e:
+            err = traceback.format_exc()
+            logger.error("[GamePO::insert_without_id] error={}".format(err))
+            raise
 
 
 roomCRUD = _RoomCRUD()
 playerCRUD = _PlayerCRUD()
- 
+gameCRUD = _GameCRUD()
+
 if __name__ == '__main__':
     
     

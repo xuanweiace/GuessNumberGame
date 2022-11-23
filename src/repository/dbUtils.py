@@ -12,6 +12,7 @@ def close_conn_hook():
     print("当前db_connection:", db_connection.query)
     db_connection.close()
 
+print("注册关闭db_connection的hook")
 atexit.register(close_conn_hook)
 
 #获取游标
